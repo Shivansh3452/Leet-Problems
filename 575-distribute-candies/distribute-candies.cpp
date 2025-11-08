@@ -1,11 +1,7 @@
 class Solution {
 public:
     int distributeCandies(vector<int>& candyType) {
-        int n=candyType.size();
-        unordered_map<int,int> mpp;
-        for(auto& type: candyType){
-            mpp[type]++;
-        }
-        return min((int)mpp.size(),n/2);
+        set<int> s(begin(candyType),end(candyType));
+        return std::min((int)s.size(),(int)candyType.size()/2);
     }
 };
