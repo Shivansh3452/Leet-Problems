@@ -15,13 +15,27 @@ class Node {
 
 class Solution {
   public:
-  vector<int> ans;
     vector<int> inOrder(Node* root) {
-        if(root==NULL)
-            return ans;
-        inOrder(root->left);
-        ans.push_back(root->data);
-        inOrder(root->right);
+        vector<int> ans;
+        Node* curr=root;
+        
+        while(curr!=NULL){
+            if(curr->left==NULL){
+                ans.push_back(curr->data);
+                curr=curr->right;
+            }
+            else{
+                Node* leftChild=curr->left;
+                while(leftChild->right!=NULL){
+                    leftChild=leftChild->right;
+                }
+                leftChild->right=curr;
+                Node* temp=curr;
+                curr=curr->left;
+                temp->left=NULL;
+            }
+        }
         return ans;
+        
     }
 };
