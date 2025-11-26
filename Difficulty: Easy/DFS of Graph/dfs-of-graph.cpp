@@ -1,27 +1,26 @@
 class Solution {
   public:
-  
-    void DFS(vector<vector<int>> &adj,int u,vector<bool> &visited,vector<int> &res){
-        if(visited[u]==true)
-            return;
-        visited[u]=true;
-        res.push_back(u);
-        for(int &v:adj[u]){
-            if(!visited[v]){
-                DFS(adj,v,visited,res);
+
+    void solver(int node, vector<vector<int>> &adj, vector<int> &visited, vector<int> &ans) {
+        ans.push_back(node);
+        visited[node] = 1;
+
+        for (auto &i : adj[node]) {
+            if (!visited[i]) {
+                solver(i, adj, visited, ans);
             }
         }
     }
   
     vector<int> dfs(vector<vector<int>>& adj) {
-        unordered_map<int,vector<int>> mpp;
-        int V=adj.size();
-        
-        vector<int> res;
-        vector<bool> visited(V,false);
-        
-        DFS(adj,0,visited,res);
-        
-        return res;
+
+        int V = adj.size();
+        vector<int> visited(V, 0);
+        vector<int> ans;
+
+        // DFS always starts from node 0 in GFG dfs problem
+        solver(0, adj, visited, ans);
+
+        return ans;
     }
 };
