@@ -1,27 +1,17 @@
 class Solution {
 public:
-    typedef long long ll;
-    ll t[100001][2];
-
-    ll helper(int i,int n,vector<int> &nums,bool flag){
-        if(i>=n)
-            return 0;
-        if(t[i][flag]!=-1)
-            return t[i][flag];
-        ll skip=helper(i+1,n,nums,flag);     //skip wali condition
-        ll val=nums[i];
-
-        if(flag==false)    
-            val=-val;
-        ll take=val+helper(i+1,n,nums,!flag);  //take wali condition sign opposite
-
-        return t[i][flag]=max(take,skip);
-    }
-
     long long maxAlternatingSum(vector<int>& nums) {
-        bool flag=true;   // to tell if the val indexed  is needed to subtract or add
+
+        // 0 → even state (+)
+        // 1 → odd state (-)
         int n=nums.size();
-        memset(t,-1,sizeof(t));
-        return helper(0,n,nums,flag);
+        vector<vector<long>>t(n+1,vector<long>(2,0));     //even ke liye 0 and odd ke liye 1
+        for(int i=1;i<=n;i++){
+            //even ke liye
+            t[i][0]=max(t[i-1][0],t[i-1][1]+nums[i-1]);
+            //odd ke liye
+             t[i][1]=max(t[i-1][1],t[i-1][0]-nums[i-1]);
+        }
+        return t[n][0];
     }
 };
