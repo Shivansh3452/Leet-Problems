@@ -1,20 +1,18 @@
 class Solution {
 public:
     int t[501][501];
-    int helper(int i,int j,string& s1,string& s2,int m,int n){
-        if(i==m)
-            return n-j;
-        if(j==n)    
-            return m-i;
-        if(t[i][j]!=-1)
-            return t[i][j];
-        if(s1[i]==s2[j])
-            return helper(i+1,j+1,s1,s2,m,n);
+    int helper(int m,int n,string& s1,string& s2){
+        if(m==0||n==0)
+            return m+n;
+        if(t[m][n]!=-1)
+            return t[m][n];
+        if(s1[m-1]==s2[n-1])
+            return helper(m-1,n-1,s1,s2);
         else{
-            int inset=1+helper(i,j+1,s1,s2,m,n);
-            int delet=1+helper(i+1,j,s1,s2,m,n);
-            int leplace=1+helper(i+1,j+1,s1,s2,m,n);
-            return t[i][j]=min({inset,delet,leplace});
+            int inset=1+helper(m,n-1,s1,s2);
+            int delet=1+helper(m-1,n,s1,s2);
+            int leplace=1+helper(m-1,n-1,s1,s2);
+            return t[m][n]=min({inset,delet,leplace});
         }
         return -1;
     }
@@ -22,6 +20,6 @@ public:
         int m=s1.size();
         int n=s2.size();
         memset(t,-1,sizeof(t));
-        return helper(0,0,s1,s2,m,n);
+        return helper(m,n,s1,s2);
     }
 };
