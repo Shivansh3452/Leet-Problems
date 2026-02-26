@@ -15,7 +15,9 @@ public:
     bool onePresent(TreeNode* root){
         if(!root)
             return false;
-        return root->val==1||onePresent(root->left)||onePresent(root->right);
+        if(root->val==1)
+            return true;
+        return onePresent(root->left)||onePresent(root->right);
     }
     TreeNode* pruneTree(TreeNode* root) {
         if(!root)
