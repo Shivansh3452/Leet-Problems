@@ -11,13 +11,23 @@
  */
 class Solution {
 public:
+
+    bool onePresent(TreeNode* root){
+        if(!root)
+            return false;
+        return root->val==1||onePresent(root->left)||onePresent(root->right);
+    }
     TreeNode* pruneTree(TreeNode* root) {
         if(!root)
             return NULL;
-        root->left=pruneTree(root->left);
-        root->right=pruneTree(root->right);
-        if(root->left==NULL &&root->right==NULL &&root->val==0)
-            return NULL;
+        if(!onePresent(root->left))
+            root->left=NULL;
+        if(!onePresent(root->right))
+            root->right=NULL;
+        pruneTree(root->left);
+        pruneTree(root->right);
+        if(root->left==NULL&&root->right==NULL && root->val==0)
+            root=NULL;
         return root;
     }
 };
