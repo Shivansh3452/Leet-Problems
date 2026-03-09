@@ -12,29 +12,25 @@
 class Solution {
 public:
 
-    long sum=0;
-    long maxP=0;
-    int totalsum(TreeNode* root){
+    long long sum=0;
+    long long maxP=0;
+    long long totalsum(TreeNode* root){
         if(!root)
             return 0;
-        return root->val+totalsum(root->left)+totalsum(root->right);
-    }
-    int find(TreeNode* root){
-        if(!root)
-            return 0;
-        int leftsum=find(root->left);
-        int rightsum=find(root->right);
+        long long leftsum=totalsum(root->left);
+        long long rightsum=totalsum(root->right);
         long subtreesum=root->val+leftsum+rightsum;
-        long remainingsubtreesum=sum-subtreesum;
-        maxP=max(maxP,subtreesum*remainingsubtreesum);
+        if(sum!=0){
+            long long remainingsubtreesum=sum-subtreesum;
+            maxP=max(maxP,subtreesum*remainingsubtreesum);
+        }
         return subtreesum;
     }
     int maxProduct(TreeNode* root) {
         if(!root)
             return 0;
-        maxP=0;
         sum=totalsum(root);
-        find(root);
+        totalsum(root);
         return maxP%1000000007;
     }
 };
