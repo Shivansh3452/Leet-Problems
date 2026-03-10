@@ -31,9 +31,6 @@ public:
                 q1.push(node1->left);
                 q2.push(node2->left);
             }
-            else if(node1->left&&!node2->left){
-                q1.push(node1->left);
-            }
             else if(node1->left||node2->left){
                 return false;
             }
@@ -43,9 +40,6 @@ public:
             }
             else if(node1->right||node2->right){
                 return false;
-            }
-            else if(!node1->right&&node2->right){
-                q2.push(node2->right);
             }
         }
         return true;
