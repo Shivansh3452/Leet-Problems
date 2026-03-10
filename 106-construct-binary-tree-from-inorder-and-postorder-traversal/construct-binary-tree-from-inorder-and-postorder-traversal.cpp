@@ -12,28 +12,27 @@
 class Solution {
 public:
 
-    TreeNode* solver(vector<int>& inorder, vector<int>& postorder,int start,int end,int &idx){
-        if(start>end)
+    TreeNode* helper(int inst,int inend,int postst,int postend,vector<int>& inorder, vector<int>& postorder){
+        if(inst>inend)
             return NULL;
-        int rootdata=postorder[idx];
-        idx--;      //move backwards in postorder
-        int i=start;
-        for(;i<=end;i++){
-            if(inorder[i]==rootdata)
-                break;
+        int root_candidate=postorder[postend];
+        TreeNode* root=new TreeNode(root_candidate);
+        int i=inst;
+        for(;i<=inend;i++){
+            if(inorder[i]==root->val)
+               break; 
         }
-        TreeNode* root=new TreeNode(rootdata);
-        root->right=solver(inorder,postorder,i+1,end,idx);
-        root->left=solver(inorder,postorder,start,i-1,idx);
+        int leftsize=i-inst;
+        root->left=helper(inst,i-1,postst,postst+leftsize-1,inorder,postorder);
+        root->right=helper(i+1,inend,postst+leftsize,postend-1,inorder,postorder);
 
         return root;
     }
-    
-
     TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
-        int n=inorder.size();
-        int idx=n-1;
-
-        return solver(inorder,postorder,0,n-1,idx);
+        int inst=0;
+        int inend=inorder.size()-1;
+        int postst=0;
+        int postend=postorder.size()-1;
+        return helper(inst,inend,postst,postend,inorder,postorder);
     }
 };
