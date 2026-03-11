@@ -6,25 +6,25 @@
  *     TreeNode *right;
  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
  * };
  */
 class Solution {
 public:
-
-    int dfs(TreeNode* root){
-        if(!root)
-            return 0;
-        if(!root->left&&!root->right)
-            return 1;
-        if(!root->left)
-            return 1+dfs(root->right);
-        if(!root->right)
-            return 1+dfs(root->left);
-        return 1+min(dfs(root->left),dfs(root->right));
+    int dfs(TreeNode* root, int dep) {
+        if (!root)
+            return INT_MAX;
+        if (!root->left && !root->right)
+            return dep;
+        int lft = dfs(root->left, dep + 1);
+        int rght = dfs(root->right,dep + 1);
+        return min(lft,rght);
     }
     int minDepth(TreeNode* root) {
-        int ans=dfs(root);
-        return ans;
+        if(!root)
+            return 0;
+        
+        return dfs(root,1);
     }
 };
