@@ -11,22 +11,22 @@
  */
 class Solution {
 public:
-
-    int maxDepth,bottomLeftVal;
-    void dfs(TreeNode* curr,int depth){
-        if(!curr)
-            return;
-        if(depth>maxDepth){
-            bottomLeftVal=curr->val;
-            maxDepth=depth;
-        }
-        dfs(curr->left,depth+1);
-        dfs(curr->right,depth+1);
-    }
     int findBottomLeftValue(TreeNode* root) {
-        maxDepth=-1;
-        bottomLeftVal=0;
-        dfs(root,0);
-        return bottomLeftVal;
+        int ans=0;
+        queue<TreeNode*> q;
+        q.push(root);
+        while(!q.empty()){
+            int n=q.size();
+            while(n--){
+                TreeNode* node=q.front();
+                q.pop();
+                ans=node->val;
+                if(node->right)
+                    q.push(node->right);
+                if(node->left)
+                    q.push(node->left);
+            }
+        }
+        return ans;
     }
 };
