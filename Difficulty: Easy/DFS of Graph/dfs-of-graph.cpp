@@ -1,26 +1,19 @@
 class Solution {
   public:
-
-    void solver(int node, vector<vector<int>> &adj, vector<int> &visited, vector<int> &ans) {
-        ans.push_back(node);
-        visited[node] = 1;
-
-        for (auto &i : adj[node]) {
-            if (!visited[i]) {
-                solver(i, adj, visited, ans);
+    vector<int> ans;
+    void helper(int i,vector<bool>& vis,vector<vector<int>>& adj){
+        vis[i]=true;
+        ans.push_back(i);
+        for(auto& it: adj[i]){
+            if(!vis[it]){
+                helper(it,vis,adj);
             }
         }
     }
-  
     vector<int> dfs(vector<vector<int>>& adj) {
-
-        int V = adj.size();
-        vector<int> visited(V, 0);
-        vector<int> ans;
-
-        // DFS always starts from node 0 in GFG dfs problem
-        solver(0, adj, visited, ans);
-
+        int n=adj.size();
+        vector<bool> vis(n,false);
+        helper(0,vis,adj);
         return ans;
     }
 };
