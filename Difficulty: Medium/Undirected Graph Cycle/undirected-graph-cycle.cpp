@@ -4,23 +4,21 @@ class Solution {
     vector<vector<int>> grapher(int V,vector<vector<int>>& edges){
         vector<vector<int>> adj(V);
         for(auto& e:edges){
-            int u=e[0];
-            int v=e[1];
-            adj[u].push_back(v);
-            adj[v].push_back(u);
+            adj[e[0]].push_back(e[1]);
+            adj[e[1]].push_back(e[0]);
         }
         return adj;
     }
     
-    bool isCycleDFS(vector<vector<int>> &adj,int u,vector<bool> &vis,int parent){
+    bool isCycleDFS(vector<vector<int>>& adj,int u,vector<bool>& vis,int parent){
         vis[u]=true;
-        for(int &v:adj[u]){
+        for(auto& v:adj[u]){
             if(v==parent)
                 continue;
-            if(vis[v])
-               return true;
-          if(isCycleDFS(adj,v,vis,u))
-            return true;
+            if(vis[v]==true)
+                return true;
+            if(isCycleDFS(adj,v,vis,u))
+                return true;
         }
         return false;
     }
