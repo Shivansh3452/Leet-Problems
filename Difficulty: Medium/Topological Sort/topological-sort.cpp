@@ -1,37 +1,36 @@
-
-//              KAHN ALHORITHM
-
-
 class Solution {
   public:
-    vector<int> topoSort(int N, vector<vector<int>>& edges) {
-        vector<vector<int>> adj(N);
-        vector<int> indegree(N,0);
-        for(auto& edge: edges){
-            int u=edge[0];
-            int v=edge[1];
-            adj[u].push_back(v);
-            indegree[v]++;
+  
+    vector<vector<int>> buildgraph(int V,vector<vector<int>>& edges){
+        vector<vector<int>> adj(V);
+        for(auto& e: edges){
+            adj[e[0]].push_back(e[1]);
         }
-        queue<int> q;
-        for(int i=0;i<N;i++){
-            if(indegree[i]==0){
-                q.push(i);
-            }
+        return adj;
+    }
+    
+    void DFS(vector<vector<int>>& adj,int u,int V,vector<bool>& vis,stack<int>& st){
+        vis[u]=true;
+        for(auto& v:adj[u]){
+            if(!vis[v])
+                DFS(adj,v,V,vis,st);
         }
-        vector<int> result;
-        while(!q.empty()){
-            int u=q.front();
-            q.pop();
-            result.push_back(u);
-            
-            for(auto& v:adj[u]){
-                indegree[v]--;
-                if(indegree[v]==0){
-                    q.push(v);
-                }
-            }
+        st.push(u);
+    }
+    vector<int> topoSort(int V, vector<vector<int>>& edges) {
+        vector<vector<int>> adj=buildgraph(V,edges);
+        vector<bool> vis(V,false);
+        stack<int> st;
+        for(int i=0;i<V;i++){
+            if(!vis[i])
+                DFS(adj,i,V,vis,st);
         }
-        return result;
+        vector<int> res;
+        while(!st.empty()){
+            res.push_back(st.top());
+            st.pop();
+        }
+        
+        return res;
     }
 };
