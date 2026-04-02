@@ -1,47 +1,33 @@
-// Dekho agar cycle hui graph mein to matlab hai ki eak course krne ke liye tumhe uska prerequisite karna hoga and agar wo prerequisite krna hai tohe course krna pdega jo eak cycle form krega.
-
-// to tumhe kyaa krna hai is topological sort nikalo agar nikalta hai to cycle nhi hai agar nhi nikalta hai to cycle hai bcz topological sort hamesha directed acyclic graph ka nikalta hai
-
-
 class Solution {
 public:
-    bool topologicalsortchecker(unordered_map<int,vector<int>> &adj,int n,vector<int> indegree){
-        queue<int> q;
-        int count=0;
-        
-        for(int i=0;i<n;i++){
-            if(indegree[i]==0){
-                count++;
-                q.push(i);
-            }
+    unordered_map<int,vector<int>> buildmap(vector<vector<int>>& prereq){
+        unordered_map<int,vector<int>> mpp;
+        for(auto& it:prereq){
+            mpp[it[1]].push_back(it[0]);
         }
-        while(!q.empty()){
-            int u=q.front();
-            q.pop();
-            for(int &v:adj[u]){
-                indegree[v]--;
-                if(indegree[v]==0){
-                    count++;
-                    q.push(v);
-                }
-            }
-        }
-        if(count==n)
-                return true;
-        return false;
+        return mpp;
     }
-
-    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-        unordered_map<int,vector<int>> adj;
-        vector<int> indegree(numCourses,0);
-
-        for(auto& vec:prerequisites){
-            int a=vec[0];
-            int b=vec[1];
-
-            adj[b].push_back(a);            //populate the map or list
-            indegree[a]++;              // uski traf aane wali nodes ka count
+    bool isCycle(int i,vector<bool>& rec,vector<bool>& vis,unordered_map<int,vector<int>>& mpp){
+        vis[i]=true;
+        rec[i]=true;
+        for(auto& v:mpp[i]){
+            if(!vis[v]&&isCycle(v,rec,vis,mpp))
+                return true;
+            else if(rec[v])
+                return true;
         }
-        return topologicalsortchecker(adj,numCourses,indegree);
+        rec[i]=false;
+        return false;
+        
+    }
+    bool canFinish(int n, vector<vector<int>>& prerequisites) {
+        vector<bool> vis(n,false);
+        vector<bool> rec(n,false);
+        unordered_map<int,vector<int>> mpp=buildmap(prerequisites);
+        for(int i=0;i<n;i++){
+            if(!vis[i]&&isCycle(i,rec,vis,mpp))
+                return false;
+        }
+        return true;
     }
 };
