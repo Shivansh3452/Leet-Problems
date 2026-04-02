@@ -1,20 +1,38 @@
 class Solution {
 public:
-
-    void dfs(int idx,vector<bool>& vis,vector<vector<int>>& mat){
-        vis[idx]=true;
-        for(int i=0;i<mat.size();i++){
-            if(!vis[i]&&mat[idx][i])
-                dfs(i,vis,mat);
+    unordered_map<int,vector<int>> buildmap(int n,vector<vector<int>>& isConnected){
+        unordered_map<int,vector<int>> ans;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(isConnected[i][j]){
+                    ans[i].push_back(j);
+                    ans[j].push_back(i);
+                }
+            }
+        }
+        return ans;
+    }
+    void bfs(int u,int n,vector<bool>& vis,unordered_map<int,vector<int>>& mpp){
+        vis[u]=true;
+        queue<int> q;
+        q.push(u);
+        while(!q.empty()){
+            int curr=q.front();
+            q.pop();
+            for(auto& v:mpp[u]){
+                if(!vis[v])
+                    bfs(v,n,vis,mpp);
+            }
         }
     }
-    int findCircleNum(vector<vector<int>>& mat) {
-        int n=mat.size();
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        int n=isConnected.size();
+        unordered_map<int,vector<int>> mpp=buildmap(n,isConnected);
         vector<bool> vis(n,false);
         int ans=0;
         for(int i=0;i<n;i++){
             if(!vis[i]){
-                dfs(i,vis,mat);
+                bfs(i,n,vis,mpp);
                 ans++;
             }
         }
