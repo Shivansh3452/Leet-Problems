@@ -1,33 +1,31 @@
 class Solution {
   public:
     int spanningTree(int V, vector<vector<int>>& edges) {
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
         vector<vector<pair<int,int>>> adj(V);
         for(auto& e:edges){
             adj[e[0]].push_back({e[1],e[2]});
             adj[e[1]].push_back({e[0],e[2]});
         }
-        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
-        vector<bool> inMST(V,false);
+        vector<bool> inMst(V,false);
         pq.push({0,0});
-        int sum=0;
+        int wt=0;
         while(!pq.empty()){
-            auto tp=pq.top();
+            auto [weight,node]=pq.top();
             pq.pop();
-            int wt=tp.first;
-            int node=tp.second;
-            
-            if(inMST[node])
+            if(inMst[node])
                 continue;
-            inMST[node]=true;
-            sum+=wt;
-            for(auto& neigh:adj[node]){
-                int neighbor=neigh.first;
-                int neigh_wt=neigh.second;
-                if(!inMST[neighbor]){
-                    pq.push({neigh_wt,neighbor});
+            inMst[node]=true;
+            wt+=weight;
+            
+            for(auto& neighbor: adj[node]){
+                int next=neighbor.first;
+                int dist=neighbor.second;
+                if(!inMst[next]){
+                    pq.push({dist,next});
                 }
             }
         }
-        return sum;
+        return wt;
     }
 };
