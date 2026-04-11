@@ -1,43 +1,40 @@
 class Solution {
   public:
-  
-    void dfs(vector<int> adj[],int u,vector<bool>& vis){
-        vis[u]=true;
-        for(int neighbor:adj[u]){
-            if(vis[neighbor]==false)
-                dfs(adj,neighbor,vis);
+    void dfs(int nonZeroVertex,vector<bool>& vis,int V,vector<int> adj[]){
+        vis[nonZeroVertex]=true;
+        for(auto& neigh:adj[nonZeroVertex]){
+            if(!vis[neigh])
+                dfs(neigh,vis,V,adj);
         }
     }
     bool isConnected(int V,vector<int> adj[]){
-        vector<bool> vis(V,false);
-        int nonzeroconnected=-1;
+        int nonZeroVertex=-1;
         for(int i=0;i<V;i++){
-            if(adj[i].size()>0){
-                nonzeroconnected=i;
+            if(adj[i].size()!=0){
+                nonZeroVertex=i;
                 break;
             }
         }
-        if(nonzeroconnected==-1)
-            return true;
-        dfs(adj,nonzeroconnected,vis);
+        vector<bool> vis(V,false);
+        dfs(nonZeroVertex,vis,V,adj);
         for(int i=0;i<V;i++){
-            if(vis[i]==false&&adj[i].size()>0)
+            if(!vis[i]&&adj[i].size()>0)
                 return false;
         }
         return true;
     }
     int isEulerCircuit(int V, vector<int> adj[]) {
-        if(isConnected(V,adj)==false)
+        if(!isConnected(V,adj))
             return 0;
-        int oddDegreeCount=0;
+        int odddegvertex=0;
         for(int i=0;i<V;i++){
             if(adj[i].size()%2!=0)
-                oddDegreeCount++;
+                odddegvertex++;
         }
-        if(oddDegreeCount>2)
-            return 0;
-        if(oddDegreeCount==2)
+        if(odddegvertex==2)
             return 1;
+        if(odddegvertex>2)
+            return 0;
         return 2;
     }
 };
