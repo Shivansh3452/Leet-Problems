@@ -4,21 +4,14 @@ public:
         int m=grid.size();
         int n=grid[0].size();
         k=k%(m*n);
-        int temp=0;
-        while(k--){
-            temp=grid[m-1][n-1];
-            for(int i=m-1;i>=0;i--){
-                for(int j=n-1;j>=0;j--){
-                    if(j==0){
-                        if(i!=0)
-                            grid[i][0]=grid[i-1][n-1];
-                    }
-                    else
-                        grid[i][j]=grid[i][j-1];
-                }
+        vector<vector<int>> ans(m,vector<int>(n));
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                int idx=i*n+j;
+                int nxt=(idx+k)%(m*n);
+                ans[nxt/n][nxt%n]=grid[i][j];
             }
-            grid[0][0]=temp;
         }
-        return grid;
+        return ans;
     }
 };
