@@ -1,37 +1,29 @@
 class Solution {
 public:
+    int t[101][101];
     vector<vector<int>> ans;
-
-    void solve(int i,vector<int>& candidates, int target,vector<int>& temp){
-        if(i==candidates.size()){
-        int sum=0;
-        for(int j= 0;j<temp.size();j++){
-            sum+=temp[j];
-        }
-        if(sum==target){
+    void helper(int i,vector<int> temp,vector<int>& nums,int target){
+        if(target==0){
             ans.push_back(temp);
+            return;
         }
-        return;
-    }
-    int sum=0;
-    for(int j=0;j<temp.size();j++){
-        sum+=temp[j];
-    }
-    if(sum>target){
-        return;
-    }
-        temp.push_back(candidates[i]);
-        solve(i+1,candidates,target,temp);
+        if(i>=nums.size()||target<0||nums[i]>target)
+            return;
+        temp.push_back(nums[i]);
+        helper(i+1,temp,nums,target-nums[i]);
         temp.pop_back();
-        while(i+1<candidates.size()&& candidates[i]==candidates[i+1]){
-            i++;
-        }
-        solve(i+1,candidates,target,temp);
+        int j=i;
+        while(j<nums.size()&&nums[j]==nums[i])
+            j++;
+        helper(j, temp, nums, target);
     }
-    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        sort(candidates.begin(),candidates.end());
+    vector<vector<int>> combinationSum2(vector<int>& nums, int target) {
+        memset(t,-1,sizeof(t));
+        sort(nums.begin(),nums.end());
         vector<int> temp;
-        solve(0,candidates,target,temp);
-        return ans; 
+        helper(0,temp,nums,target);
+        sort(ans.begin(), ans.end());
+        ans.erase(unique(ans.begin(), ans.end()), ans.end());
+        return ans;
     }
 };
