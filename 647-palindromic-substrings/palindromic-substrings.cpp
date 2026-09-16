@@ -1,22 +1,23 @@
 class Solution {
 public:
+    int t[1001][1001];
+    bool helper(int i,int j,string s){
+        if(i>j)
+            return true;
+        if(t[i][j]!=-1)
+            return t[i][j];
+        if(s[i]==s[j])
+            return t[i][j]=helper(i+1,j-1,s);
+        return t[i][j]=false;
+    }
     int countSubstrings(string s) {
-        int n=s.size();
-        vector<vector<bool>> t(n,vector<bool>(n,false));
+        memset(t,-1,sizeof(t));
         int count=0;
-//state=t[i][j]=true:s[i:j] is a palindrome substring where i and j are inclusive
-        for(int L=1;L<=n;L++){
-            for(int i=0;i+L<=n;i++){
-                int j=i+L-1;
-                if(L==1)    //size is 1;
-                    t[i][j]=true;
-                else if(L==2)  //size is 2
-                    t[i][j]=(s[i]==s[j]);
-                else 
-                    t[i][j]=(s[i]==s[j]&&t[i+1][j-1]);
-                if(t[i][j])
+        for(int i=0;i<s.size();i++){
+            for(int j=i;j<s.size();j++){
+                if(helper(i,j,s))
                     count++;
-                }
+            }
         }
         return count;
     }
