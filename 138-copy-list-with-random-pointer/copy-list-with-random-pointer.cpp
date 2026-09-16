@@ -18,17 +18,16 @@ class Solution {
 public:
     Node* copyRandomList(Node* head) {
         unordered_map<Node*,Node*> mpp;
-        Node* temp=head;
-        while(temp!=NULL){
-            mpp[temp]=new Node(temp->val);
-            temp=temp->next;
+        Node* ptr=head;
+        while(ptr){
+            mpp[ptr]=new Node(ptr->val);
+            ptr=ptr->next;
         }
-        ListNode* head1;
-        temp=head;
-        while(temp){
-            mpp[temp]->next=mpp[temp->next];
-            mpp[temp]->random=mpp[temp->random];
-            temp=temp->next;
+        ptr=head;
+        while(ptr!=nullptr){
+            mpp[ptr]->next=mpp[ptr->next];
+            mpp[ptr]->random=mpp[ptr->random];
+            ptr=ptr->next;
         }
         return mpp[head];
     }
