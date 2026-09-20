@@ -11,19 +11,37 @@
  */
 class Solution {
 public:
-
-    void preOrder(TreeNode* root,int level,vector<int>& res){
-        if(!root)
+    void bfs(TreeNode* root,vector<int>& temp,vector<vector<int>>& ans){
+        if(!root){
+            ans.push_back(temp);
             return;
-        if(res.size()<level)
-            res.push_back(root->val);
-            preOrder(root->right,level+1,res);
-            preOrder(root->left,level+1,res);
+        }
+        queue<TreeNode*> q;
+        q.push(root);
+        while(!q.empty()){
+            int n=q.size();
+            while(n--){
+                TreeNode* node=q.front();
+                q.pop();
+                temp.push_back(node->val);
+                if(node->left)
+                    q.push(node->left);
+                if(node->right)
+                    q.push(node->right);
+            }
+            ans.push_back(temp);
+        }
     }
-
     vector<int> rightSideView(TreeNode* root) {
+        if(!root)
+            return {};
+        vector<vector<int>> ans;
+        vector<int> temp;
+        bfs(root,temp,ans);
         vector<int> res;
-        preOrder(root,1,res);
+        for(auto& it: ans){
+            res.push_back(it[it.size()-1]);
+        }
         return res;
     }
 };
